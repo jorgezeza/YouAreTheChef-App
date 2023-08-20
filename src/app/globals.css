@@ -2,8 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-.menu__transition {
+div.menu__transition {
   /* transition: all 1s ease-in-out 0.5s; */
   left:0;
   transform: translateX(0px)
+}
+
+.container__nav-menu {
+  @apply bg-black w-1/2 h-screen text-white md:w-1/3 lg:w-1/6 relative -left-[999px] transition-all ease-in-out duration-1000;
 }
