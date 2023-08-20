@@ -12,6 +12,9 @@ const config: Config = {
       fontFamily: {
         'secondary': ['var(--stylish)', ...fontFamily.sans]
       },
+      colors: {
+        primaryColor: '#F41F2D'
+      }
     },
   },
   plugins: [],
