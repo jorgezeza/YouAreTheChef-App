@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import PizzaButtonsOptions from './components/PizzaButtonsOptions'
 
 export default function Home () {
   return (
@@ -12,7 +13,7 @@ export default function Home () {
       />
 
 
-
+    <PizzaButtonsOptions />
 
     </main>
       
