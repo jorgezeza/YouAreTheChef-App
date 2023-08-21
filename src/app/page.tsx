@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import PizzaButtonsOptions from './components/PizzaButtonsOptions'
+import PizzaShape from './components/PizzaShape'
 
 export default function Home () {
   return (
@@ -7,16 +8,14 @@ export default function Home () {
     <main className='relative w-screen h-[calc(100vh-3.5rem)] overflow-y-hidden' >
       <Image
         src="/bakgroundPizza.png"
-        alt=''
+        alt=""
         fill
         className='-z-10'
       />
-
-
     <PizzaButtonsOptions />
-
+    <PizzaShape />
     </main>
-      
+    
     </>
   )
 }
