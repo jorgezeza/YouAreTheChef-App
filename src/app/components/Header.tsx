@@ -5,7 +5,6 @@ import NavBar from "./NavBar"
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false)
-  console.log(openMenu)
   return (
     <>
       <header className="flex items-center w-full h-14 bg-primaryColor text-white px-6 " >
