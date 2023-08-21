@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Roboto, Stylish } from 'next/font/google'
 import Header from './components/Header'
+import Footer from './components/Footer'
 
 export const roboto = Roboto({
   weight: ['400', '700'],
@@ -26,9 +27,10 @@ export default function RootLayout ({
 }) {
   return (
     <html lang="pt-br">
-      <body className={`${roboto.className} ${stylish.variable}`}>
+      <body className={`${roboto.className} ${stylish.variable} flex flex-col`}>
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   )

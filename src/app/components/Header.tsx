@@ -14,7 +14,6 @@ const Header = () => {
               src='./Icons/Menuhamburguer.svg'
               alt=""
               fill
-
             />
           </button>
           <span>MINHA PIZZA</span>

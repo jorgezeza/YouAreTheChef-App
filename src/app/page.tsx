@@ -6,13 +6,13 @@ import MainPizzaButtonsOptions from './components/MainPizzaButtonsOptions'
 export default function Home () {
   return (
     <>
-      <main className='relative w-screen h-[calc(100vh-3.5rem)]' >
-        <div className='w-full absolute' >
+      <main className='relative w-screen flex-1' >
+        <div className='w-full h-full' >
           <Image
             src="/bakgroundPizza.png"
             alt=""
             fill
-            className='-z-10'
+            className='-z-10 object-cover'
           />
         </div>
         <PizzaButtonsOptions />

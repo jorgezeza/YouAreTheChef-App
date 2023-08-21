@@ -1,7 +1,7 @@
 import Image from "next/image"
 const MainPizzaButtonsOptions = () => {
   return (
-    <div className="flex flex-col gap-4 px-6" >
+    <div className="flex flex-col gap-4 px-6 mb-16" >
       <div className="flex font-secondary text-xl bg-white rounded-full " >
         <div className="flex justify-center items-center bg-primaryColor w-11 h-11 rounded-tl-xl rounded-bl-xl rounded-tr-lg" >
           <Image 

@@ -13,7 +13,8 @@ const config: Config = {
         'secondary': ['var(--stylish)', ...fontFamily.sans]
       },
       colors: {
-        primaryColor: '#F41F2D'
+        primaryColor: '#F41F2D',
+        secondary: '#00A115'
       },
       spacing: {
         '74px': '74px'
