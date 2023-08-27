@@ -1,8 +1,15 @@
+'use client'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Roboto, Stylish } from 'next/font/google'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import Providers from './providers/providers'
+import Login from './pages/login/page'
+import { usePathname } from 'next/navigation'
+
+
+const user = true
 
 export const roboto = Roboto({
   weight: ['400', '700'],
@@ -25,12 +32,22 @@ export default function RootLayout ({
 }: {
   children: React.ReactNode
 }) {
+
+  const path = usePathname()
+  console.log('ROTA:', path)
+
   return (
     <html lang="pt-br">
       <body className={`${roboto.className} ${stylish.variable} flex flex-col`}>
-        <Header />
-        {children}
-        <Footer />
+        <Providers>
+          {user ? <Login /> :
+            <>
+              <Header />
+              {children}
+              <Footer />
+            </>
+          }
+        </Providers>
       </body>
     </html>
   )
