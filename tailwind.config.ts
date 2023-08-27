@@ -14,7 +14,8 @@ const config: Config = {
       },
       colors: {
         primaryColor: '#F41F2D',
-        secondary: '#00A115'
+        secondary: '#00A115',
+        inputColor: '#353232'
       },
       spacing: {
         '74px': '74px'
