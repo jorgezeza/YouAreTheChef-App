@@ -1,36 +1,118 @@
-import { createContext, useState } from "react"
+import { createContext, useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import app from '../services/firebase'
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile
+}
+  from "firebase/auth"
+import { translateError } from "../utiuls/translateErros"
 
-const AuthContext = createContext({})
-const auth = getAuth(app);
+const auth = getAuth(app)
+
+type LoginProps = {
+  email: string,
+  password: string
+}
+
+type CreateAccountProps = {
+  name: string,
+  email: string,
+  password: string
+}
+
+type ErrorProps = {
+  hasError: boolean,
+  errorType: string | undefined
+}
+
+type UserProps = {
+  isUserLoggedIn: boolean,
+  userInfomation: object
+}
+
+type AuthContextProps = {
+  login: ({ email, password }: LoginProps) => {}
+  createUser: ({name, email, password}: CreateAccountProps) => {}
+  loginError: ErrorProps
+  setLoginError: ({ hasError, errorType }: ErrorProps) => void
+  userInfo: UserProps | null
+  setUserInfo: ({ isUserLoggedIn, userInfomation }: UserProps) => void
+  auth: typeof auth
+}
+
+const AuthContext = createContext<AuthContextProps>({} as AuthContextProps)
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [email, setEmail] = useState('jorgenunes@gmail.com')
-  const [password, setPassword] = useState('123456')
-  const [user, setUser] = useState<any | null>()
+  const { push } = useRouter()
+  const [loginError, setLoginError] = useState<ErrorProps>({} as ErrorProps)
+  const [userInfo, setUserInfo] = useState<UserProps>({} as UserProps)
 
-
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in 
-      setUser(userCredential.user)
-      // ...
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        setUserInfo({
+          isUserLoggedIn: !!user,
+          userInfomation: { ...user }
+        })
+        push('/')
+      } else {
+        console.log('Não está logado')
+      }
     })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // ..
-    })
+  }, [])
 
-  return (
-    <AuthContext.Provider value={{
-      user,
-      auth
-    }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  const createUser = async ({ name, email, password }: CreateAccountProps) => {
+    return await createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        updateProfile(auth.currentUser!, {
+          displayName: name
+        }).catch(() => console.log('Erro ao adicionar o userName'))
+
+        setUserInfo({
+          isUserLoggedIn: !!userCredential.user,
+          userInfomation: userCredential.user
+        })
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      })
+  }
+
+  const login = async ({ email, password }: LoginProps) => {
+    return await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        setUserInfo({
+          isUserLoggedIn: !!userCredential.user,
+          userInfomation: userCredential.user
+        })
+        push('/')
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setLoginError({ hasError: true, errorType: translateError(error.code) })
+      });
+  }
+
+  return <AuthContext.Provider value={{
+    login,
+    createUser,
+    loginError,
+    setLoginError,
+    userInfo,
+    setUserInfo,
+    auth
+  }}>
+    {children}
+  </AuthContext.Provider>
 }
 
 export { AuthContext, AuthProvider }
