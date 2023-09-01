@@ -5,11 +5,11 @@ import { Roboto, Stylish } from 'next/font/google'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Providers from './providers/providers'
-import Login from './pages/login/page'
+
 import { usePathname } from 'next/navigation'
+import { checkIsPublicRoute } from './utiuls/check-is-public-route'
 
-
-const user = true
+import PrivateRoute from './privateRoute'
 
 export const roboto = Roboto({
   weight: ['400', '700'],
@@ -34,18 +34,19 @@ export default function RootLayout ({
 }) {
 
   const path = usePathname()
-  console.log('ROTA:', path)
+  const isPublic = checkIsPublicRoute(path)
 
   return (
     <html lang="pt-br">
       <body className={`${roboto.className} ${stylish.variable} flex flex-col`}>
         <Providers>
-          {user ? <Login /> :
-            <>
-              <Header />
-              {children}
-              <Footer />
-            </>
+          {isPublic && children}
+
+          {!isPublic && <PrivateRoute>
+            <Header />
+            {children}
+            <Footer />
+          </PrivateRoute>
           }
         </Providers>
       </body>
