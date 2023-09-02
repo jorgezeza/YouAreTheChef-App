@@ -6,7 +6,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  updateProfile
+  updateProfile,
+  signOut
 }
   from "firebase/auth"
 import { translateError } from "../utiuls/translateErros"
@@ -36,12 +37,13 @@ type UserProps = {
 
 type AuthContextProps = {
   login: ({ email, password }: LoginProps) => {}
-  createUser: ({name, email, password}: CreateAccountProps) => {}
+  createUser: ({ name, email, password }: CreateAccountProps) => {}
   loginError: ErrorProps
   setLoginError: ({ hasError, errorType }: ErrorProps) => void
   userInfo: UserProps | null
   setUserInfo: ({ isUserLoggedIn, userInfomation }: UserProps) => void
-  auth: typeof auth
+  auth: typeof auth,
+  logout: () => void
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps)
@@ -54,7 +56,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        const uid = user.uid;
         setUserInfo({
           isUserLoggedIn: !!user,
           userInfomation: { ...user }
@@ -102,6 +103,17 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
   }
 
+  const logout = () => {
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      console.log('Usuário deslogado')
+      push('/pages/login')
+    }).catch((error) => {
+      // An error happened.
+      console.log('Erro ao desolgar', error)
+    })
+  }
+
   return <AuthContext.Provider value={{
     login,
     createUser,
@@ -109,7 +121,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoginError,
     userInfo,
     setUserInfo,
-    auth
+    auth,
+    logout
   }}>
     {children}
   </AuthContext.Provider>
