@@ -11,10 +11,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ name = '', type = 'text', img = '', helperText = '', ...props }, ref) => {
     const inputId = useId()
     const hasError = helperText.length > 0
-
     return (
       <>
-        <label htmlFor={inputId} className="flex p-2 gap-2 bg-inputColor/20 border-b border-b-white/20">
+        <label htmlFor={inputId} className="flex p-2 gap-2 bg-thirdColor/20 border-b border-b-white/20">
           <Image
             src={img}
             alt=""
