@@ -1,10 +1,10 @@
-import { PizzasSizesProps } from "./PizzaButtonsOptions"
+import { PizzasSizesProps } from "../page"
 
 
 const ModalPizzasFlavours = ({ setOpenModalPizzasFlavours, setFlavoursOfPizza, currentPizza }:
   { setOpenModalPizzasFlavours: any, setFlavoursOfPizza: any, currentPizza: PizzasSizesProps }) => {
   return (
-    <div className="flex justify-center absolute top-8 w-full h-4/5" >
+    <div className="flex justify-center absolute top-8 w-full h-4/5 z-10" >
       <div className="bg-thirdColor text-white w-4/5 flex flex-wrap content-between">
         <table className="w-full">
           <thead className="border-b-[1px] border-white/20" >

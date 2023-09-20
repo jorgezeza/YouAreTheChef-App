@@ -1,42 +1,47 @@
 "use client"
-import { useEffect } from 'react'
+
 import Image from 'next/image'
 import PizzaButtonsOptions from './components/PizzaButtonsOptions'
 import PizzaShape from './components/PizzaShape'
 import MainPizzaButtonsOptions from './components/MainPizzaButtonsOptions'
 
-import { collection, addDoc, getDocs  } from "firebase/firestore";
-import { db } from './services/firebase'
+import { useDbCollection } from './hooks'
+import { useState } from 'react'
 
-console.log('DBbbbbbbb:', db)
+export type PizzasSizesProps = {
+  id: string,
+  flavours: number[],
+  name: string,
+  size: number,
+  slices: number[]
+}
 
-const getDocsDb = async () => {
-  try {
-    const docRef = await addDoc(collection(db, "users"), {
-      first: "Ada",
-      last: "Lovelace",
-      born: 1815
-    });
-    console.log("Document written with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
+export type InitialValuesProps = {
+  collection: string,
+  currentPizza: PizzasSizesProps,
+  setCurrentPizza: () => void,
+}
+
+export const initialValues = {
+  collection: 'pizzasSizes',
+  currentPizza: {
+    id: 'CMYMWyx4e8jZrV2kLPwd',
+    name: 'Grande',
+    flavours: [1, 2, 3],
+    size: 40,
+    slices: [4, 8, 16]
+  } as PizzasSizesProps,
+  setCurrentPizza: () => { },
 }
 
 export default function Home () {
+  const pizzasSizes = useDbCollection<PizzasSizesProps>(initialValues.collection)
 
-  useEffect(() => {
-    const func = async() => {
-      const querySnapshot = await getDocs(collection(db, "pizzasFlavours"));
-      querySnapshot.forEach((doc) => {
-        console.log('AQUiiiiii:', `${doc.id} => ${doc.data()}`);
-        console.log(doc.data());
-      });
-    }
+  const [currentPizza, setCurrentPizza] =
+    useState<PizzasSizesProps>(initialValues.currentPizza)
 
-    func()
-  }, [])
-
+  const [flavoursOfPizza, setFlavoursOfPizza] =
+    useState(currentPizza.flavours[0])
 
   return (
     <>
@@ -49,16 +54,18 @@ export default function Home () {
             className='-z-10 object-cover'
           />
         </div>
-        <div>
-
-          <button onClick={getDocsDb} className='bg-green-500 p-7'>Enviar</button>
-
-        </div>
-        <PizzaButtonsOptions />
-        <PizzaShape />
+        <PizzaButtonsOptions
+          currentPizza={currentPizza}
+          pizzasSizes={pizzasSizes}
+          setCurrentPizza={setCurrentPizza}
+          flavoursOfPizza={flavoursOfPizza}
+          setFlavoursOfPizza={setFlavoursOfPizza}
+        />
+        <PizzaShape
+          flavoursOfPizza={flavoursOfPizza}
+        />
         <MainPizzaButtonsOptions />
       </main>
-
     </>
   )
 }
